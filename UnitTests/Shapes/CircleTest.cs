@@ -25,6 +25,7 @@ namespace UnitTests.Shapes
         }
 
         [TestCase(int.MaxValue, TestName = "Радиус = int.MaxValue")]
+        [TestCase(5, TestName = "Радиус = 5")]
         public void MaxRadiusTest(int radius)
         {
             Assert.DoesNotThrow(() => new Circle(radius));

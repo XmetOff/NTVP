@@ -16,7 +16,12 @@ namespace SquaresCalc3._5.View
         /// Свойство, содержащее ссылку на форму добалвения/изменения фигур
         /// </summary>
         public AddFigureForm AddFigureForm { get; }
+
+        /// <summary>
+        /// Свойство, содержащее ссылку на лист фигур
+        /// </summary>
         public BindingList<IShape> Data { get; set; }
+
 
         /// <summary>
         /// Поле для хранения пути к открываемому файлу, переданному через командную строку в коструктор
@@ -34,6 +39,7 @@ namespace SquaresCalc3._5.View
             shapesDataGridView.DataSource = Data;
             AddFigureForm.Data = Data;
             showShapePropertiesObjectControl.ControlsEnabled = false;
+
         }
 
         /// <summary>
@@ -44,7 +50,7 @@ namespace SquaresCalc3._5.View
         {
             AddFigureForm = new AddFigureForm();
             InitializeComponent();
-            showShapePropertiesObjectControl.ControlsEnabled = false;
+            showShapePropertiesObjectControl.ReadOnly = false;
             _filePath = filePath;
         }
 
@@ -93,12 +99,12 @@ namespace SquaresCalc3._5.View
             shapesDataGridView.SelectionChanged -= ShapesDataGridView_SelectionChanged;
             if (string.IsNullOrWhiteSpace(SearchTextBox.Text))
             {
-                shapesDataGridView.DataSource = AddFigureForm.Data;
+                shapesDataGridView.DataSource = Data;
             }
             else
             {
                 var tempBindingList = new BindingList<IShape>();
-                foreach (IShape shape in AddFigureForm.Data)
+                foreach (IShape shape in Data)
                 {
                     if (shape.Name.ToLower().Contains(SearchTextBox.Text.Trim().ToLower()))
                     {
@@ -153,7 +159,7 @@ namespace SquaresCalc3._5.View
         /// <param name="filePath">Путь к сериализуемому файлу</param>
         private void Serialize(string filePath)
         {
-            if (AddFigureForm.Data.Count != 0)
+            if (Data.Count != 0)
             {
                 string jsonContents = JsonConvert.SerializeObject(AddFigureForm.Data, Formatting.Indented,
                     new JsonSerializerSettings()
@@ -189,7 +195,7 @@ namespace SquaresCalc3._5.View
                         });
                 }
             }
-            shapesDataGridView.DataSource = AddFigureForm.Data;
+            shapesDataGridView.DataSource = Data;
             shapesDataGridView.SelectionChanged += ShapesDataGridView_SelectionChanged;
         }
 
@@ -213,33 +219,8 @@ namespace SquaresCalc3._5.View
         /// <param name="e">Параметры события</param>
         private void ShapesDataGridView_SelectionChanged(object sender, EventArgs e)
         {
-            if (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] is Circle)
-            {
-                showShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 2;
-                showShapePropertiesObjectControl.ParBTextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Circle).Radius.ToString();
-                showShapePropertiesObjectControl.ControlsEnabled = false;
-            }
-            if (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] is Triangle)
-            {
-                showShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 0;
-                showShapePropertiesObjectControl.ParATextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Triangle).LegA.ToString();
-                showShapePropertiesObjectControl.ParBTextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Triangle).LegB.ToString();
-                showShapePropertiesObjectControl.ParCTextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Triangle).LegC.ToString();
-                showShapePropertiesObjectControl.ControlsEnabled = false;
-            }
-            if (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] is Quadrate)
-            {
-                showShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 1;
-                showShapePropertiesObjectControl.ParATextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Quadrate).SideA.ToString();
-                showShapePropertiesObjectControl.ParBTextBoxText =
-                  (AddFigureForm.Data[shapesDataGridView.SelectedRows[0].Index] as Quadrate).SideB.ToString();
-                showShapePropertiesObjectControl.ControlsEnabled = false;
-            }
+            showShapePropertiesObjectControl.ShapesDataShow(Data[shapesDataGridView.SelectedRows[0].Index]);
+            showShapePropertiesObjectControl.ReadOnly = true;
         }
 
         /// <summary>
