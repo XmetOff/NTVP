@@ -62,30 +62,8 @@ namespace SquaresCalc3._5.View
             addRandomDataButton.Hide();
 #endif
             _selectedShapeIndex = index;
-            if (shape is Circle)
-            {
-                addShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 2;
-                addShapePropertiesObjectControl.ParBTextBoxText =
-                  ((Circle) shape).Radius.ToString();
-            }
-            if (shape is Triangle)
-            {
-                addShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 0;
-                addShapePropertiesObjectControl.ParATextBoxText =
-                  (shape as Triangle).LegA.ToString();
-                addShapePropertiesObjectControl.ParBTextBoxText =
-                  (shape as Triangle).LegB.ToString();
-                addShapePropertiesObjectControl.ParCTextBoxText =
-                  (shape as Triangle).LegC.ToString();
-            }
-            if (shape is Quadrate)
-            {
-                addShapePropertiesObjectControl.FigureTypeComboBoxSelectedIndex = 1;
-                addShapePropertiesObjectControl.ParATextBoxText =
-                  (shape as Quadrate).SideA.ToString();
-                addShapePropertiesObjectControl.ParBTextBoxText =
-                  (shape as Quadrate).SideB.ToString();
-            }
+
+            addShapePropertiesObjectControl.ShapesDataShow(Data[_selectedShapeIndex]);
 
             addShapeButton.Click -= AddShapeButton_Click;
             addShapeButton.Click += EditShapeButton_Click;

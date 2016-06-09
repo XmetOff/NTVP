@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Shapes;
 
 namespace SquaresCalc3._5.View
 {
@@ -8,6 +9,31 @@ namespace SquaresCalc3._5.View
     /// </summary>
     public partial class ObjectControl : UserControl
     {
+        private bool _readOnly;
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                _readOnly = value;
+                if (_readOnly)
+                {
+                    figureTypeComboBox.Enabled = false;
+                    parATextBox.Enabled = false;
+                    parBTextBox.Enabled = false;
+                    parCTextBox.Enabled = false;
+                }
+                else
+                {
+                    figureTypeComboBox.Enabled = true;
+                    parATextBox.Enabled = true;
+                    parBTextBox.Enabled = true;
+                    parCTextBox.Enabled = true;
+                }
+            }
+        }
+       
+
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
@@ -57,7 +83,8 @@ namespace SquaresCalc3._5.View
         /// </summary>
         public bool ControlsEnabled
         {
-            set { parATextBox.Enabled = parBTextBox.Enabled = parCTextBox.Enabled = figureTypeComboBox.Enabled = value; }
+            set { parATextBox.Enabled = parBTextBox.Enabled = parCTextBox.Enabled = figureTypeComboBox.Enabled = value;
+            }
         }
 
         /// <summary>
@@ -127,5 +154,34 @@ namespace SquaresCalc3._5.View
                     break;
             }
         }
+
+        public void ShapesDataShow(IShape shape)
+        {
+            if (shape is Circle)
+            {
+                FigureTypeComboBoxSelectedIndex = 2;
+                ParBTextBoxText =
+                  ((Circle)shape).Radius.ToString();
+            }
+            if (shape is Triangle)
+            {
+                FigureTypeComboBoxSelectedIndex = 0;
+                ParATextBoxText =
+                  (shape as Triangle).LegA.ToString();
+                ParBTextBoxText =
+                  (shape as Triangle).LegB.ToString();
+                ParCTextBoxText =
+                  (shape as Triangle).LegC.ToString();
+            }
+            if (shape is Quadrate)
+            {
+                FigureTypeComboBoxSelectedIndex = 1;
+                ParATextBoxText =
+                  (shape as Quadrate).SideA.ToString();
+                ParBTextBoxText =
+                  (shape as Quadrate).SideB.ToString();
+            }
+        }
+        
     }
 }
